@@ -23,4 +23,6 @@ public class UserTest {
 
     @Column(name="create_time")
     private Date createTime;
+
+    public void test(){}
 }
