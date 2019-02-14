@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuecheng.manage_course.dao.TeachplanMapper">
+    <resultMap id="treeMap" type="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+        <id column="aid" property="id"></id>
+        <result column="aname" property="pname"></result>
+        <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+            <id column="bid" property="id"></id>
+            <result column="bname" property="pname"></result>
+            <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
+                <id column="cid" property="id"></id>
+                <result column="cname" property="pname"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getTeachTree" parameterType="java.lang.String"
+            resultMap="treeMap">
+SELECT a.`id` AS aid, a.`pname` AS aname, b.`id` AS bid, b.`pname` AS bname, c.`id` AS cid
+	, c.`pname` AS cname
+FROM teachplan a
+	LEFT JOIN teachplan b ON b.`parentid` = a.`id`
+	LEFT JOIN teachplan c ON b.`id` = c.`parentid`
+WHERE a.`parentid` = 0
+ <if test="_parameter  != null">
+     AND a.courseid=#{courseId}
+ </if>
+    </select>
+</mapper>
