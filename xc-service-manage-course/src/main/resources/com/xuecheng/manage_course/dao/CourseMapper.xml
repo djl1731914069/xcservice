@@ -5,4 +5,31 @@
             resultType="com.xuecheng.framework.domain.course.CourseBase">
         select * from course_base where id = #{id}
     </select>
+    <resultMap id="categoryMap" type="com.xuecheng.framework.domain.course.ext.CategoryNode">
+        <id column="aid" property="value"></id>
+        <result column="aname" property="label"></result>
+        <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.CategoryNode">
+            <id column="bid" property="value"></id>
+            <result column="bname" property="label"></result>
+            <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.CategoryNode">
+                <id column="cid" property="value"></id>
+                <result column="cname" property="label"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findCategoryList" resultMap="categoryMap">
+        SELECT
+  a.name AS aname,
+  a.id  AS aid,
+  b.name AS  bname,
+  b.id  AS bid,
+  c.name AS  cname,
+  c.id AS cid
+FROM
+  category a
+  INNER JOIN category b
+    ON a.`id` = b.`parentid`
+  INNER JOIN category c
+    ON b.`id` = c.`parentid`
+    </select>
 </mapper>

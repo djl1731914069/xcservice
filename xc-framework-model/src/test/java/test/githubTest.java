@@ -6,4 +6,7 @@ package test;
  * @Description:
  */
 public class githubTest {
+    public static void main(String[] args) {
+
+    }
 }
